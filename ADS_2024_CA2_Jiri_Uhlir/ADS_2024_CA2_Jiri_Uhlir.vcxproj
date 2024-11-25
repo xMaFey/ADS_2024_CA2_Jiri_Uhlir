@@ -128,6 +128,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ADS_2024_CA2_Jiri_Uhlir.cpp" />
+    <ClCompile Include="BinaryTree.cpp" />
+    <ClCompile Include="BSTNode.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BinaryTree.h" />
