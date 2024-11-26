@@ -1,65 +1,38 @@
 #include "BinaryTree.h"
 #include <iostream>
-#include <fstream>
-#include <sstream>
-#include <set>
-#include <cctype>
-
-void processFile(const std::string& filename, BinaryTree<char, std::set<std::string>>& tree) {
-    std::ifstream file(filename);
-    if (!file.is_open()) {
-        std::cerr << "Could not open file." << std::endl;
-        return;
-    }
-
-    std::string word;
-    while (file >> word) {
-        // Clean the word: remove punctuation and convert to lowercase
-        word.erase(remove_if(word.begin(), word.end(), [](char c) {
-            return std::ispunct(c);
-            }), word.end());
-
-        if (word.empty()) continue;
-
-        // Convert to lowercase for uniformity
-        for (auto& c : word) {
-            c = std::tolower(c);
-        }
-
-        char firstLetter = word[0];
-        tree.add(firstLetter, std::set<std::string>());
-        tree[firstLetter].insert(word);  // Add word to the set associated with the first letter
-    }
-
-    file.close();
-}
 
 int main() {
-    BinaryTree<char, std::set<std::string>> tree;
+    BinaryTree<int> tree;
 
-    // Process the text file
-    std::string filename;
-    std::cout << "Enter the name of the text file: ";
-    std::cin >> filename;
+    // Add items
+    int val1 = 10, val2 = 20, val3 = 5;
+    tree.add(val1);
+    tree.add(val2);
+    tree.add(val3);
 
-    processFile(filename, tree);
-
-    // Check if tree is empty
-    if (tree.size() == 0) {
-        std::cout << "No words found in the file." << std::endl;
-        return 0;
+    // Test get()
+    try {
+        std::cout << "Item found: " << tree.get(val1) << std::endl;
+    }
+    catch (std::logic_error& e) {
+        std::cout << e.what() << std::endl;
     }
 
-    // Print the list of letters
-    tree.printLetters();
+    // Remove an item
+    tree.remove(val2);
 
-    // Allow the user to see words associated with a given letter
-    char letter;
-    std::cout << "Enter a letter to view associated words: ";
-    std::cin >> letter;
+    // Test size
+    std::cout << "Tree size: " << tree.count() << std::endl;
 
-    tree.printWordsForLetter(std::tolower(letter));
+    // Convert tree to array
+    std::vector<int> arr = tree.toArray();
+    for (int i : arr) {
+        std::cout << i << " ";
+    }
+    std::cout << std::endl;
+
+    // Clear the tree
+    tree.clear();
 
     return 0;
 }
-
