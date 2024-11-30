@@ -25,29 +25,17 @@ int main() {
 
     file.close();
 
-    //Insert grouped words into tree map
+    // Insert grouped words into tree map
     for (const auto& entry : tempMap) {
         char key = entry.first;
-        //Iterate through vector of words for this key
-        for (const std::string& w : entry.second) {
-            map.put(key, w);
-        }
+        // Insert only the first word for each key
+        map.put(key, entry.second.front());
     }
 
-    // Displaying the contents of the map
+    // Display the contents of the map
     auto keys = map.keySet().toArray();
     for (int i = 0; i < map.size(); ++i) {
-        std::cout << "Key: " << keys[i] << ", Values: ";
-        
-        const auto& values = map.get(keys[i]);
-        //Display words separated by commas
-        for (size_t j = 0; j < values.size(); ++j) {
-            std::cout << values[j];
-            if (j < values.size() - 1) {
-                std::cout << ", ";
-            }
-        }
-        std::cout << "\n";
+        std::cout << "Key: " << keys[i] << ", Value: " << map.get(keys[i]) << "\n";
     }
 
     return 0;

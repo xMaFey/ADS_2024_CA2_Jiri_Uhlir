@@ -30,15 +30,8 @@ template<class K, class V>
 void TreeMap<K, V>::put(K& key, const V& value)
 {
     WordEntry<K, V> entry(key, value);
-    WordEntry<K, V> existingEntry(key);  // Create a temporary entry for checking
 
-    if (tree.contains(existingEntry)) {
-        existingEntry = tree.get(existingEntry);
-        existingEntry.addValue(value);  // Add the word to the existing entry's values
-    }
-    else {
-        tree.add(entry);  // Add the entry if it's a new key
-    }
+    tree.add(entry);
 }
 
 template<class K, class V>
