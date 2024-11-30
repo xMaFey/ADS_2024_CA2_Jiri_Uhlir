@@ -1,64 +1,105 @@
 #pragma once
-#include "BinaryTree.h" // Include BinaryTree for the tree structure
+#include "BinaryTree.h"
+#include "WordEntry.h"
 
-template <class K, class V> // Define template classes for Key (K) and Value (V)
+template <class K, class V>
 class TreeMap
 {
-private:
-    BinaryTree<std::pair<K, V>> tree;  // Internal tree holding key-value pairs
+    BinaryTree<WordEntry<K, V>> tree;
+
+    void keyPreOrder(BSTNode<WordEntry<K, V>>* node, BinaryTree<K>& out);
 
 public:
-    // Clears the map by clearing the internal BinaryTree
-    void clear() {
-        tree.clear();  // Uses the clear method from BinaryTree class
-    }
+    TreeMap();
 
-    // Checks if the map contains a specified key
-    bool containsKey(K key) {
-        try {
-            get(key);  // Try to get the value for the key
-            return true;  // If no exception, key is found
-        }
-        catch (...) {
-            return false;  // If exception occurs, key is not found
-        }
-    }
+    void put(K& key, const V& value);
+    V& get(K key);
+    V& operator[](K key);
+    void clear();
 
-    // Returns the value associated with the specified key
-    V& get(K key) {
-        std::pair<K, V> pairToFind = std::make_pair(key, V());  // Create a pair with the key and a default value
-        return tree.get(pairToFind).second;  // Get the pair and return the value (second element of the pair)
-    }
-
-    // Returns a BinaryTree containing all the keys
-    BinaryTree<K> keySet() {
-        BinaryTree<K> keys;  // Create a BinaryTree to hold the keys
-        // Traverse the internal tree and add each key to the keys tree
-        for (auto item : tree.toArray()) {
-            keys.add(item.first);  // Add each key (first element of the pair)
-        }
-        return keys;
-    }
-
-    // Inserts a new key-value pair into the map
-    void put(K key, V value) {
-        std::pair<K, V> pairToInsert = std::make_pair(key, value);  // Create a pair of key and value
-        tree.add(pairToInsert);  // Add the pair to the BinaryTree
-    }
-
-    // Returns the number of key-value mappings in the map
-    int size() {
-        return tree.count();  // Get the count of items in the internal BinaryTree
-    }
-
-    // Removes the entry associated with the given key
-    bool removeKey(K key) {
-        std::pair<K, V> pairToRemove = std::make_pair(key, V());  // Create the pair with the key
-        return tree.remove(pairToRemove);  // Call the remove method of BinaryTree to remove the pair
-    }
-
-    // Overload the operator[] to access the value for a specific key
-    V& operator[](K key) {
-        return get(key);  // Access the value for the key using the get method
-    }
+    bool containsKey(K key);
+    BinaryTree<K> keySet();
+    bool removeKey(K key);
+    int size();
 };
+
+template<class K, class V>
+TreeMap<K, V>::TreeMap() { }
+
+template<class K, class V>
+void TreeMap<K, V>::put(K& key, const V& value)
+{
+    WordEntry<K, V> entry(key, value);
+    WordEntry<K, V> existingEntry(key);  // Create a temporary entry for checking
+
+    if (tree.contains(existingEntry)) {
+        existingEntry = tree.get(existingEntry);
+        existingEntry.addValue(value);  // Add the word to the existing entry's values
+    }
+    else {
+        tree.add(entry);  // Add the entry if it's a new key
+    }
+}
+
+template<class K, class V>
+V& TreeMap<K, V>::get(K key)
+{
+    WordEntry<K, V> entry(key, V());
+    WordEntry<K, V>& result = tree.get(entry);
+    return result.getValue();
+}
+
+template<class K, class V>
+V& TreeMap<K, V>::operator[](K key)
+{
+    return this->get(key);
+}
+
+template<class K, class V>
+void TreeMap<K, V>::clear()
+{
+    tree.clear();
+}
+
+template<class K, class V>
+bool TreeMap<K, V>::containsKey(K key)
+{
+    WordEntry<K, V> entry(key);
+    return tree.contains(entry);
+}
+
+template<class K, class V>
+BinaryTree<K> TreeMap<K, V>::keySet()
+{
+    BinaryTree<K> keyTree;
+    keyPreOrder(tree.root, keyTree);
+    return keyTree;
+}
+
+template<class K, class V>
+void TreeMap<K, V>::keyPreOrder(BSTNode<WordEntry<K, V>>* node, BinaryTree<K>& out)
+{
+    if (node == nullptr) {
+        return;
+    }
+
+    WordEntry<K, V> entry = node->getItem();
+    K ent = entry.getKey();
+    out.add(ent);
+
+    keyPreOrder(node->getLeft(), out);
+    keyPreOrder(node->getRight(), out);
+}
+
+template<class K, class V>
+bool TreeMap<K, V>::removeKey(K key)
+{
+    WordEntry<K, V> entry(key);
+    return tree.remove(entry);
+}
+
+template<class K, class V>
+int TreeMap<K, V>::size()
+{
+    return tree.count();
+}

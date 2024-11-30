@@ -1,135 +1,271 @@
-﻿#ifndef BINARYTREE_H
-#define BINARYTREE_H
-
+﻿#pragma once
 #include "BSTNode.h"
+
 #include <vector>
-#include <stdexcept>
-
 template <class T>
-class BinaryTree {
-private:
-    BSTNode<T>* root;
-
-    void addItemToArray(BSTNode<T>* node, int& pos, T* arr) {
-        if (node != nullptr) {
-            addItemToArray(node->getLeft(), pos, arr);
-            arr[pos++] = node->getItem();
-            addItemToArray(node->getRight(), pos, arr);
-        }
-    }
+class BinaryTree
+{
+	void addItemToArray(BSTNode<T>* node, int& pos, T* arr);
 
 public:
-    BinaryTree() : root(nullptr) {}
+	BSTNode<T>* root;
+	BinaryTree();
+	BinaryTree(const BinaryTree<T>& other);
+	BinaryTree<T> operator=(const BinaryTree<T>& other);
+	void add(T& item);
+	bool remove(T& item);
+	void clear();
+	int count();
+	T& get(T& item);
 
-    BinaryTree(const BinaryTree<T>& other) {
-        root = nullptr;
-        if (other.root != nullptr)
-            root = new BSTNode<T>(*other.root);
-    }
-
-    BinaryTree<T>& operator=(const BinaryTree<T>& other) {
-        if (this == &other)
-            return *this;
-        if (other.root != nullptr)
-            root = new BSTNode<T>(*other.root);
-        else
-            root = nullptr;
-        return *this;
-    }
-
-    void add(T& item) {
-        if (root == nullptr) {
-            root = new BSTNode<T>(item);
-        }
-        else {
-            root->add(item);
-        }
-    }
-
-    int count() {
-        return (root == nullptr) ? 0 : root->count();
-    }
-
-    bool remove(T& item) {
-        BSTNode<T>* toBeRemoved = root;
-        BSTNode<T>* parent = nullptr;
-        bool found = false;
-
-        while (!found && toBeRemoved != nullptr) {
-            if (toBeRemoved->getItem() == item) {
-                found = true;
-            }
-            else {
-                parent = toBeRemoved;
-                if (toBeRemoved->getItem() > item) {
-                    toBeRemoved = toBeRemoved->getLeft();
-                }
-                else {
-                    toBeRemoved = toBeRemoved->getRight();
-                }
-            }
-        }
-        if (!found) return false;
-
-        if (toBeRemoved->getLeft() == nullptr || toBeRemoved->getRight() == nullptr) {
-            BSTNode<T>* newChild = (toBeRemoved->getLeft() == nullptr) ? toBeRemoved->getRight() : toBeRemoved->getLeft();
-            if (parent == nullptr) {
-                root = newChild;
-            }
-            else if (parent->getLeft() == toBeRemoved) {
-                parent->setLeft(newChild);
-            }
-            else {
-                parent->setRight(newChild);
-            }
-            delete toBeRemoved;
-            return true;
-        }
-
-        BSTNode<T>* smallestParent = toBeRemoved;
-        BSTNode<T>* smallest = toBeRemoved->getRight();
-        while (smallest->getLeft() != nullptr) {
-            smallestParent = smallest;
-            smallest = smallest->getLeft();
-        }
-        toBeRemoved->setItem(smallest->getItem());
-        if (smallestParent == toBeRemoved) {
-            smallestParent->setRight(smallest->getRight());
-        }
-        else {
-            smallestParent->setLeft(smallest->getRight());
-        }
-        delete smallest;
-        return true;
-    }
-
-    T& get(T& item) {
-        BSTNode<T>* current = root;
-        while (current != nullptr) {
-            if (current->getItem() == item)
-                return current->getItem();
-            else if (current->getItem() > item)
-                current = current->getLeft();
-            else
-                current = current->getRight();
-        }
-        throw std::logic_error("Item not found");
-    }
-
-    void clear() {
-        delete root;
-        root = nullptr;
-    }
-
-    std::vector<T> toArray() {
-        std::vector<T> arr;
-        int pos = 0;
-        arr.resize(root ? root->count() : 0);
-        addItemToArray(root, pos, arr.data());
-        return arr;
-    }
-
-    // Additional methods like keySet(), containsKey(), size(), etc., can be added here.
+	void printInOrder();
+	void printInOrder(BSTNode<T>* node);
+	void printPreOrder();
+	void printPreOrder(BSTNode<T>* node);
+	void printPostOrder();
+	void printPostOrder(BSTNode<T>* node);
+	T* toArray();
+	~BinaryTree();
 };
 
-#endif // BINARYTREE_H
+template <class T>
+BinaryTree<T>::BinaryTree()
+{
+	root = nullptr;
+}
+
+template <class T>
+BinaryTree<T>::BinaryTree(const BinaryTree<T>& other)
+{
+	root = nullptr;
+	if (other.root != nullptr)
+		root = new BSTNode<T>(*other.root);
+}
+template <class T>
+BinaryTree<T> BinaryTree<T>::operator=(const BinaryTree<T>& other)
+{
+	if (this == &other)
+		return *this;
+	if (other.root != nullptr)
+		root = new BSTNode<T>(*other.root);
+	else
+		root = nullptr;
+	return *this;
+
+}
+template <class T>
+void BinaryTree<T>::add(T& item)
+{
+	if (root == nullptr)
+	{
+		root = new BSTNode<T>(item);
+		root->setItem(item);
+	}
+	else
+	{
+		root->add(item);
+	}
+}
+template <class T>
+int BinaryTree<T>::count()
+{
+	if (root == nullptr)
+		return 0;
+	return root->count();
+}
+template <class T>
+bool BinaryTree<T>::remove(T& item)
+{
+	BSTNode<T>* toBeRemoved = root;
+	BSTNode<T>* parent = nullptr;
+	bool found = false;
+
+	while (!found && toBeRemoved != nullptr)
+	{
+
+		if (toBeRemoved->getItem() == item)
+		{
+
+			found = true;
+		}
+		else
+		{
+			parent = toBeRemoved;
+			if (toBeRemoved->getItem() > item)
+			{
+				toBeRemoved = toBeRemoved->getLeft();
+			}
+			else
+			{
+				toBeRemoved = toBeRemoved->getRight();
+			}
+		}
+	}
+	if (!found)
+		return false;
+
+	if (toBeRemoved->getLeft() == nullptr || toBeRemoved->getRight() == nullptr)
+	{
+		BSTNode<T>* newChild;
+		if (toBeRemoved->getLeft() == nullptr)
+		{
+			newChild = toBeRemoved->getRight();
+		}
+		else
+		{
+			newChild = toBeRemoved->getLeft();
+		}
+		if (parent == nullptr)
+		{
+			root = newChild;
+		}
+		else if (parent->getLeft() == toBeRemoved)
+		{
+			parent->setLeft(newChild);
+		}
+		else
+		{
+			parent->setRight(newChild);
+		}
+		return true;
+	}
+
+	BSTNode<T>* smallestParent = toBeRemoved;
+	BSTNode<T>* smallest = toBeRemoved->getRight();
+	while (smallest->getLeft() != nullptr)
+	{
+		smallestParent = smallest;
+		smallest = smallest->getLeft();
+	}
+	toBeRemoved->setItem(smallest->getItem());
+	if (smallestParent == toBeRemoved)
+	{
+		smallestParent->setRight(smallest->getRight());
+	}
+	else
+	{
+		smallestParent->setLeft(smallest->getRight());
+	}
+
+}
+template <class T>
+T& BinaryTree<T>::get(T& item)
+{
+	bool found = false;
+	BSTNode<T>* current = root;
+	while (!found)
+	{
+
+		if (current == nullptr)
+			break;
+		if (current->getItem() == item)
+			return current->getItem();
+		else if (current->getItem() > item)
+			current = current->getLeft();
+		else
+			current = current->getRight();
+	}
+	throw logic_error("ITem not found");
+}
+template <class T>
+void BinaryTree<T>::addItemToArray(BSTNode<T>* node, int& pos, T* arr)
+{
+	if (node != nullptr)
+	{
+		addItemToArray(node->getLeft(), pos, arr);
+		arr[pos] = node->getItem();
+		pos++;
+		addItemToArray(node->getRight(), pos, arr);
+	}
+
+}
+
+template <class T>
+T* BinaryTree<T>::toArray()
+{
+	T* arr = new T[root->count()];
+	int pos = 0;
+	addItemToArray(root, pos, arr);
+	return arr;
+}
+
+template <class T>
+void BinaryTree<T>::clear()
+{
+	delete root;
+	root = nullptr;
+}
+template <class T>
+BinaryTree<T>::~BinaryTree()
+{
+	if (root != nullptr)
+	{
+		delete root;
+		root = nullptr;
+	}
+}
+
+template<class T>
+void BinaryTree<T>::printInOrder()
+{
+	this->printInOrder(root);
+	cout << endl;
+}
+
+template<class T>
+void BinaryTree<T>::printInOrder(BSTNode<T>* node)
+{
+	if (node == nullptr) {
+		return;
+	}
+
+	//Left subtree
+	printInOrder(node->getLeft());
+	//Print nodes data
+	cout << node->getItem() << " ";
+	//Right subtree
+	printInOrder(node->getRight());
+}
+
+template<class T>
+void BinaryTree<T>::printPreOrder()
+{
+	this->printPreOrder(root);
+	cout << endl;
+}
+
+template<class T>
+void BinaryTree<T>::printPreOrder(BSTNode<T>* node)
+{
+	if (node == nullptr) {
+		return;
+	}
+
+	//Print current node
+	cout << node->getItem() << " ";
+	//Print left subtree
+	printPreOrder(node->getLeft());
+	//Print right subtree
+	printPreOrder(node->getRight());
+}
+
+template<class T>
+void BinaryTree<T>::printPostOrder()
+{
+	this->printPostOrder(root);
+	cout << endl;
+}
+template<class T>
+void BinaryTree<T>::printPostOrder(BSTNode<T>* node)
+{
+	if (node == nullptr) {
+		return;
+	}
+
+	//Print left subtree
+	printPostOrder(node->getLeft());
+	//Print right subtree
+	printPostOrder(node->getRight());
+	//Print current node
+	cout << node->getItem() << " ";
+}

@@ -133,9 +133,10 @@
     <ClInclude Include="BinaryTree.h" />
     <ClInclude Include="BSTNode.h" />
     <ClInclude Include="TreeMap.h" />
+    <ClInclude Include="WordEntry.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Test.txt" />
+    <Text Include="Text.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="employee_records.csv" />

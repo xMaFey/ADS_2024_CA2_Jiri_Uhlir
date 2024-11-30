@@ -29,9 +29,12 @@
     <ClInclude Include="TreeMap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WordEntry.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Test.txt" />
+    <Text Include="Text.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="employee_records.csv" />
