@@ -2,41 +2,70 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <string>
 #include "TreeMap.h"
 
 int main() {
-    TreeMap<char, std::string> map;
+    TreeMap<char, std::vector<string>> map;
 
     std::ifstream file("Text.txt");
+
     if (!file.is_open()) {
         std::cerr << "Failed to open file.\n";
         return 1;
     }
 
     std::string word;
-    //Temporary map to store words with the first letter
-    std::map<char, std::vector<std::string>> tempMap;
 
-    //read words from file and group them by first letter
-    while (file >> word) {
-        char firstLetter = word[0];
-        tempMap[firstLetter].push_back(word);
+    //Read the file and add words to TreeMap
+    while (getline(file, word)) {
+        if (map.containsKey(word[0])) {
+            bool newWord = true;
+            for (std::string& w : map.get(word[0])) {
+                if (w == word) {
+                    newWord = false;
+                    break; //do not store duplicates
+                }
+            }
+            if (newWord) {
+                map.get(word[0]).push_back(word);
+            }
+        }
+        else {
+            vector<string> value = {word};
+            map.put(word[0], value);
+        }
     }
 
     file.close();
+    
+    BinaryTree<char> set = map.keySet();
+    set.printInOrder();
 
-    // Insert grouped words into tree map
-    for (const auto& entry : tempMap) {
-        char key = entry.first;
-        // Insert only the first word for each key
-        map.put(key, entry.second.front());
+    // Display words for selected letter
+    string letter;          //cannot use char for getline
+    cout << "\nEnter a letter to search for words: ";
+    getline(cin, letter);
+
+    // Make sure the input has at least one character
+    if (!letter.empty()) {
+        char key = letter[0];
+        if (map.containsKey(key)) {
+            for (const std::string& s : map.get(key)) {
+                std::cout << s << std::endl;
+            }
+        }
+        else {
+            std::cout << "No words found for the letter '" << key << "'.\n";
+        }
+    }
+    else {
+        std::cout << "Invalid input.\n";
     }
 
-    // Display the contents of the map
-    auto keys = map.keySet().toArray();
-    for (int i = 0; i < map.size(); ++i) {
-        std::cout << "Key: " << keys[i] << ", Value: " << map.get(keys[i]) << "\n";
-    }
+    /*for (string s : map.get(letter[0])) {
+        cout << s << endl;
+    }*/
 
     return 0;
 }

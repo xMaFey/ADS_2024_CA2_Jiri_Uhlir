@@ -41,6 +41,7 @@ BinaryTree<T>::BinaryTree(const BinaryTree<T>& other)
 	if (other.root != nullptr)
 		root = new BSTNode<T>(*other.root);
 }
+
 template <class T>
 BinaryTree<T> BinaryTree<T>::operator=(const BinaryTree<T>& other)
 {
@@ -53,6 +54,7 @@ BinaryTree<T> BinaryTree<T>::operator=(const BinaryTree<T>& other)
 	return *this;
 
 }
+
 template <class T>
 void BinaryTree<T>::add(T& item)
 {
@@ -66,6 +68,7 @@ void BinaryTree<T>::add(T& item)
 		root->add(item);
 	}
 }
+
 template <class T>
 int BinaryTree<T>::count()
 {
@@ -73,6 +76,7 @@ int BinaryTree<T>::count()
 		return 0;
 	return root->count();
 }
+
 template <class T>
 bool BinaryTree<T>::remove(T& item)
 {
@@ -148,6 +152,7 @@ bool BinaryTree<T>::remove(T& item)
 	}
 
 }
+
 template <class T>
 T& BinaryTree<T>::get(T& item)
 {
@@ -167,6 +172,7 @@ T& BinaryTree<T>::get(T& item)
 	}
 	throw logic_error("ITem not found");
 }
+
 template <class T>
 void BinaryTree<T>::addItemToArray(BSTNode<T>* node, int& pos, T* arr)
 {
@@ -195,6 +201,7 @@ void BinaryTree<T>::clear()
 	delete root;
 	root = nullptr;
 }
+
 template <class T>
 BinaryTree<T>::~BinaryTree()
 {
@@ -255,6 +262,7 @@ void BinaryTree<T>::printPostOrder()
 	this->printPostOrder(root);
 	cout << endl;
 }
+
 template<class T>
 void BinaryTree<T>::printPostOrder(BSTNode<T>* node)
 {

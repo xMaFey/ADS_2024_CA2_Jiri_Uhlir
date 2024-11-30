@@ -34,19 +34,19 @@ public:
     };
 
     // Comparison operator for sorting in the tree (based on the key)
-    bool operator<(WordEntry& other) const {
+    bool operator<(WordEntry& other) {
         return key < other.key;
     }
 
-    bool operator>(WordEntry& other) const {
+    bool operator>(WordEntry& other) {
         return key > other.key;
     }
 
-    bool operator==(WordEntry& other) const {
+    bool operator==(WordEntry& other) {
         return key == other.key;
     }
 
-    friend ostream& operator<<(ostream& out, WordEntry& entity)
+    friend std::ostream& operator<<(std::ostream& out, WordEntry& entity)
     {
         return out << "Key: " << entity.key << ", of value: " << entity.value << "\n";
     }

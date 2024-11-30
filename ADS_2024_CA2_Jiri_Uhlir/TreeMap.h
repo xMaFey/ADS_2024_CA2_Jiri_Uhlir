@@ -12,7 +12,7 @@ class TreeMap
 public:
     TreeMap();
 
-    void put(K& key, const V& value);
+    void put(K& key, V& value);
     V& get(K key);
     V& operator[](K key);
     void clear();
@@ -24,22 +24,47 @@ public:
 };
 
 template<class K, class V>
-TreeMap<K, V>::TreeMap() { }
+TreeMap<K, V>::TreeMap() {
+    tree.root = nullptr;
+}
 
 template<class K, class V>
-void TreeMap<K, V>::put(K& key, const V& value)
+void TreeMap<K, V>::put(K& key, V& value)
 {
     WordEntry<K, V> entry(key, value);
+    try {
+        tree.get(entry);
+        tree.remove(entry);
+    } catch(logic_error entry){}
 
     tree.add(entry);
+
+    /*if (containsKey(key)) {
+        WordEntry<K, V>& entry = tree.get(WordEntry<K, V>(key));
+        entry.setValue(value);
+    }
+    else {
+        tree.add(WordEntry<K, V>(key, value));
+    }*/
 }
 
 template<class K, class V>
 V& TreeMap<K, V>::get(K key)
 {
     WordEntry<K, V> entry(key, V());
-    WordEntry<K, V>& result = tree.get(entry);
-    return result.getValue();
+
+    try {
+        WordEntry<K, V>& result = tree.get(entry);
+        return result.getValue();
+    }
+    catch (logic_error entry) {
+        cout << entry.what();
+        V value;
+        return value;
+    }
+    
+   /*WordEntry<K, V>& result = tree.get(entry);
+    return result.getValue();*/
 }
 
 template<class K, class V>
@@ -57,8 +82,14 @@ void TreeMap<K, V>::clear()
 template<class K, class V>
 bool TreeMap<K, V>::containsKey(K key)
 {
-    WordEntry<K, V> entry(key);
-    return tree.contains(entry);
+    WordEntry<K, V> entry(key, V());
+    try {
+        tree.get(entry).getValue();
+        return true;
+    }
+    catch (logic_error entry) {
+        return false;
+    }
 }
 
 template<class K, class V>
@@ -87,7 +118,7 @@ void TreeMap<K, V>::keyPreOrder(BSTNode<WordEntry<K, V>>* node, BinaryTree<K>& o
 template<class K, class V>
 bool TreeMap<K, V>::removeKey(K key)
 {
-    WordEntry<K, V> entry(key);
+    WordEntry<K, V> entry(key, V());
     return tree.remove(entry);
 }
 

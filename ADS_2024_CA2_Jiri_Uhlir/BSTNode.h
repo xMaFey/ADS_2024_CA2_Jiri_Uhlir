@@ -26,7 +26,6 @@ public:
 	void setRight(BSTNode<T>* r);
 	T& getItem();
 	~BSTNode();
-
 };
 
 template <class T>
@@ -52,6 +51,7 @@ BSTNode<T>* BSTNode<T>::operator=(const BSTNode<T>& other)
 		this->right = new BSTNode<T>(*other.right);
 	this->data = other.data;
 }
+
 template <class T>
 BSTNode<T>::~BSTNode()
 {
@@ -65,39 +65,43 @@ BSTNode<T>::~BSTNode()
 		delete right;
 		right = nullptr;
 	}
-
 }
+
 template <class T>
 T& BSTNode<T>::getItem()
 {
 	return this->data;
 }
+
 template <class T>
 BSTNode<T>* BSTNode<T>::getLeft()
 {
 	return this->left;
 }
+
 template <class T>
 BSTNode<T>* BSTNode<T>::getRight()
 {
 	return this->right;
 }
+
 template <class T>
 BSTNode<T>* BSTNode<T>::getParent()
 {
 	return this->parent;
 }
+
 template <class T>
 void BSTNode<T>::setLeft(BSTNode<T>* l)
 {
 	this->left = l;
 }
+
 template <class T>
 void BSTNode<T>::setRight(BSTNode<T>* r)
 {
 	this->right = r;
 }
-
 
 template <class T>
 BSTNode<T>::BSTNode()
@@ -107,7 +111,6 @@ BSTNode<T>::BSTNode()
 	right = nullptr;
 }
 
-
 template <class T>
 BSTNode<T>::BSTNode(T data)
 {
@@ -116,6 +119,7 @@ BSTNode<T>::BSTNode(T data)
 	right = nullptr;
 	this->data = data;
 }
+
 template <class T>
 int BSTNode<T>::count()
 {

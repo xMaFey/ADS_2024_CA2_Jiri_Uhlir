@@ -1,10 +1,8 @@
 apple
-ahoy
 banana
 ball
 brick
 cat
-candle
 dog
 diamond
 elephant
@@ -17,7 +15,6 @@ hat
 house
 ice
 island
-jackal
 juice
 kite
 king
@@ -26,13 +23,8 @@ light
 moon
 monkey
 nail
-notebook
 orange
 octopus
-pearl
-pencil
-queen
-quilt
 rabbit
 rose
 sun
@@ -44,11 +36,4 @@ unicorn
 violet
 vase
 water
-wonder
-xylophone
-xenon
-yellow
-yarn
-zebra
-zero
 
